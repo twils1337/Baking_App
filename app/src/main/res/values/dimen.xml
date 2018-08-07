@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="cardTextSize">25sp</dimen>
+    <dimen name="cardHeight">200dp</dimen>
+    <dimen name="cardViewMargins">16dp</dimen>
+</resources>
