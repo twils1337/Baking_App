@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Baking</string>
+
     <string name="defaultCardViewText">Recipe</string>
+
+    <string name="defaultHeaderText">Recipe</string>
+    <string name="ingredientsLabel">Ingredients:</string>
+    <string name="stepsLabel">Steps:</string>
 </resources>

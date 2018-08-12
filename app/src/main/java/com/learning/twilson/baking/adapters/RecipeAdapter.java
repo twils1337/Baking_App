@@ -1,4 +1,4 @@
-package com.learning.twilson.baking;
+package com.learning.twilson.baking.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
+
+import com.learning.twilson.baking.R;
+import com.learning.twilson.baking.interfaces.RecipeAdapterOnClickHandler;
 
 import java.util.List;
 
@@ -49,6 +52,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHold
 
         public RecipeHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             ButterKnife.bind(this, itemView);
         }
 

@@ -3,4 +3,12 @@
     <dimen name="cardTextSize">25sp</dimen>
     <dimen name="cardHeight">200dp</dimen>
     <dimen name="cardViewMargins">16dp</dimen>
+    
+    <dimen name="recipeTitleHeight">85dp</dimen>
+    <dimen name="recipeDetailTitleTextSize">20sp</dimen>
+
+    <dimen name="defaultPadding">16dp</dimen>
+    <dimen name="listPadding">30dp</dimen>
+    <dimen name="recipeDetailHeaderTextSize">20sp</dimen>
+    <dimen name="recipeContentTextSize">15sp</dimen>
 </resources>
