@@ -11,4 +11,7 @@
     <dimen name="listPadding">30dp</dimen>
     <dimen name="recipeDetailHeaderTextSize">20sp</dimen>
     <dimen name="recipeContentTextSize">15sp</dimen>
+
+    <dimen name="stepsDescriptionTextSize">20sp</dimen>
+    <dimen  name="stepsInfoButtonSize">20dp</dimen>
 </resources>

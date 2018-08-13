@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private String readRecipeFile(Context context) throws IOException {
-        try(InputStream iStream= context.getResources().openRawResource(R.raw.recipes)){
+        try(InputStream iStream = context.getResources().openRawResource(R.raw.recipes)){
             if (iStream != null){
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(iStream));
                 String readStr;

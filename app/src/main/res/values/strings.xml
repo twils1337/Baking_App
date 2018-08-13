@@ -5,5 +5,8 @@
 
     <string name="defaultHeaderText">Recipe</string>
     <string name="ingredientsLabel">Ingredients:</string>
+
     <string name="stepsLabel">Steps:</string>
+    <string name="defaultStepsDescription">Step to bake your item.</string>
+
 </resources>

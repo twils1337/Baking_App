@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
     <TextView
@@ -21,7 +21,6 @@
         android:id="@+id/llIngredientsDetail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/cupcake"
         android:orientation="vertical">
 
         <TextView
@@ -29,7 +28,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/defaultPadding"
-            android:paddingTop="@dimen/defaultPadding"
             android:text="@string/ingredientsLabel"
             android:textSize="@dimen/recipeDetailHeaderTextSize"
             android:textStyle="bold" />
@@ -40,11 +38,10 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/listPadding"
-            android:paddingTop="@dimen/defaultPadding"
             android:text="Ingredients List"
             android:textSize="@dimen/recipeContentTextSize" />
         <TextView
-            android:id="@+id/tvSteps"
+            android:id="@+id/tvStepsDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/stepsLabel"
@@ -52,11 +49,11 @@
             android:paddingTop="@dimen/defaultPadding"
             android:paddingLeft="@dimen/defaultPadding"
             android:textStyle="bold"/>
-        <!--<android.support.v7.widget.RecyclerView-->
-            <!--android:id="@+id/stepsRV"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="@dimen/defaultPadding"/>-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvSteps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/listPadding"/>
     </LinearLayout>
 
 </LinearLayout>
