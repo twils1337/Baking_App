@@ -1,0 +1,121 @@
+package com.learning.twilson.baking.ui;
+
+
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
+import com.learning.twilson.baking.R;
+import com.learning.twilson.baking.models.Step;
+
+import java.util.List;
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class StepFragment extends Fragment {
+    private List<Step> mSteps;
+    private Step mCurrentStep;
+    private PlayerView mPlayerView;
+    private SimpleExoPlayer mExoPlayer;
+    public Integer mCurrentStepPos;
+
+    public StepFragment() {
+        // Required empty public constructor
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View rootView = inflater.inflate(R.layout.fragment_step, container, false);
+        if (savedInstanceState == null){
+            mPlayerView = rootView.findViewById(R.id.playerView);
+            buildView(rootView);
+        }
+
+        return rootView;
+    }
+
+    public void setSteps(List<Step> steps){
+        mSteps = steps;
+    }
+
+    private void setCurrentStep(Step step){
+        mCurrentStep = step;
+    }
+
+    public void setCurrentStepPos(int pos){
+        mCurrentStepPos = pos;
+        setCurrentStep(mSteps.get(pos));
+    }
+
+
+    private void buildView(View rootView){
+        if (mCurrentStep != null){
+            if ( !mCurrentStep.getVideoURL().equals("")){
+                initializePlayer();
+            }
+            else{
+                mPlayerView.setVisibility(View.GONE);
+            }
+            TextView stepDescription = rootView.findViewById(R.id.tvStepText);
+            stepDescription.setText(mCurrentStep.getDescription());
+        }
+    }
+
+    private void initializePlayer(){
+        if (mExoPlayer == null){
+            Uri videoUri = Uri.parse(mCurrentStep.getVideoURL());
+            mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), new DefaultTrackSelector());
+            mPlayerView.setPlayer(mExoPlayer);
+
+            ExtractorMediaSource.Factory emsFactory = new ExtractorMediaSource.Factory(
+                    new DefaultDataSourceFactory(getContext(), Util.getUserAgent(getActivity(), "Baking")));
+            MediaSource videoSource = emsFactory.createMediaSource(videoUri);
+
+            mExoPlayer.prepare(videoSource);
+            mExoPlayer.setPlayWhenReady(true);
+        }
+    }
+
+    private void releasePlayer(){
+        if (mExoPlayer!=null){
+            mExoPlayer.stop();
+            mExoPlayer.release();
+            mExoPlayer = null;
+        }
+
+    }
+
+    public SimpleExoPlayer getExoPlayer(){
+        return mExoPlayer;
+    }
+
+    public List<Step> getSteps(){
+        return mSteps;
+    }
+
+    public int getCurrentStepPos(){
+        return mCurrentStepPos;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        releasePlayer();
+    }
+}

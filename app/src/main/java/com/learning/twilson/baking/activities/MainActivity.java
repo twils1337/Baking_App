@@ -1,80 +1,60 @@
 package com.learning.twilson.baking.activities;
 
+import android.support.v4.app.FragmentManager;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.learning.twilson.baking.R;
-import com.learning.twilson.baking.interfaces.RecipeAdapterOnClickHandler;
+import com.learning.twilson.baking.ui.RecipesFragment;
 import com.learning.twilson.baking.models.Recipe;
-import com.learning.twilson.baking.adapters.RecipeAdapter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity
-                          implements RecipeAdapterOnClickHandler {
-    private RecipeAdapterOnClickHandler mHandler = this;
-    private List<Recipe> recipes = null;
-    private RecyclerView mRecipeRV;
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (recipes == null){
-            loadRecipes(this);
-        }
-        List<String> names = getNamesForCards();
-        mRecipeRV = findViewById(R.id.rvRecipeCards);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, calculateNumOfColumns(this));
-        mRecipeRV.setLayoutManager(gridLayoutManager);
-        mRecipeRV.setAdapter(new RecipeAdapter(names, this));
-        mRecipeRV.setHasFixedSize(true);
+        if (savedInstanceState == null) {
+            RecipesFragment recipesFragment = getRecipesFragment();
 
-    }
-    public static int calculateNumOfColumns(Context context){
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        float dpWidth = metrics.widthPixels;
-        int scalingFactor = 1000;
-        int numOfColumns = (int) (dpWidth/scalingFactor);
-        if (numOfColumns < 1){
-            numOfColumns = 1;
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .add(R.id.flRecipes, recipesFragment)
+                    .commit();
         }
-        return numOfColumns;
     }
 
-    private List<String> getNamesForCards() {
-        List<String> names = new ArrayList<>();
-        for (Recipe recipe:recipes){
-            names.add(recipe.getName());
-        }
-        return names;
+    private RecipesFragment getRecipesFragment(){
+        RecipesFragment recipesFragment = new RecipesFragment();
+        recipesFragment.setRecipes(loadRecipes(this));
+        return recipesFragment;
     }
 
-    private void loadRecipes(Context context){
+    private List<Recipe> loadRecipes(Context context){
+        List<Recipe> loadedRecipes = null;
         try {
             String recipeJson = readRecipeFile(context);
-            if(recipeJson == ""){
+            if(recipeJson.equals("")){
                 throw new Exception("Json is malformed and/or could not be read.");
             }
             Gson gson = new Gson();
-            recipes = gson.fromJson(recipeJson, new TypeToken<List<Recipe>>(){}.getType());
+            loadedRecipes = gson.fromJson(recipeJson, new TypeToken<List<Recipe>>(){}.getType());
+            return loadedRecipes;
         }
         catch (Exception e){
             Log.e("Error", "loadRecipes: " + e.getMessage());
         }
+        return loadedRecipes;
     }
 
     private String readRecipeFile(Context context) throws IOException {
@@ -93,15 +73,5 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-    }
-
-    @Override
-    public void onClick(int recipeClickedIndex) {
-        Intent recipeDetailIntent = new Intent(this, RecipeDetailActivity.class);
-        Recipe selectRecipe = recipes.get(recipeClickedIndex);
-        Gson gson = new Gson();
-        String recipeJson = gson.toJson(selectRecipe);
-        recipeDetailIntent.putExtra("RecipeJSON", recipeJson);
-        startActivity(recipeDetailIntent);
     }
 }

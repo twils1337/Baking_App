@@ -1,74 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    tools:context="com.learning.twilson.baking.activities.StepDetailActivity">
+
     <android.support.constraint.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".activities.StepDetailActivity"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="81dp">
+        android:layout_height="wrap_content">
 
-        <com.google.android.exoplayer2.ui.PlayerView
-            android:id="@+id/playerView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="0dp"
-            android:layout_marginRight="0dp"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginBottom="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/horizontalHalf"
-            android:layout_marginLeft="0dp"
-            app:layout_constraintLeft_toLeftOf="parent" />
-
-        <android.support.constraint.Guideline
-            android:id="@+id/horizontalHalf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.65" />
-
-        <TextView
-            android:id="@+id/tvStepText"
+        <FrameLayout
+            android:id="@+id/flStep"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/horizontalHalf" />
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/btnPrevious"
             android:layout_width="100dp"
             android:layout_height="50dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:onClick="onNavClick"
             android:text="Previous"
             android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvStepText" />
+            app:layout_constraintTop_toBottomOf="@+id/flStep" />
 
         <Button
             android:id="@+id/btnNext"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
+            android:onClick="onNavClick"
             android:text="Next"
             android:textSize="15dp"
-            android:onClick="onNavClick"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvStepText" />
+            app:layout_constraintTop_toBottomOf="@+id/flStep" />
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

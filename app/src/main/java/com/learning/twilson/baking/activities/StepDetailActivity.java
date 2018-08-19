@@ -1,90 +1,67 @@
 package com.learning.twilson.baking.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Handler;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 
-import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.learning.twilson.baking.R;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.learning.twilson.baking.R;
 import com.learning.twilson.baking.models.Step;
+import com.learning.twilson.baking.ui.StepFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StepDetailActivity extends AppCompatActivity {
-    private List<Step> mSteps;
-    private Step mCurrentStep;
-    private PlayerView mPlayerView;
-    private SimpleExoPlayer mExoPlayer;
-    public Integer mCurrentStepPos;
-
+    private StepFragment mStepFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_detail);
-        Intent parentIntent = getIntent();
+        if (savedInstanceState == null){
+            mStepFragment = getStepFragment();
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            fragmentManager.beginTransaction()
+                    .add(R.id.flStep, mStepFragment)
+                    .commit();
+        }
+    }
+
+    private StepFragment getStepFragment(){
+        StepFragment stepFragment = new StepFragment();
+        List<Step> steps = getStepsFromIntent(getIntent());
+        int currentStepPos = getCurrentStepPosFromIntent(getIntent());
+        stepFragment.setSteps(steps);
+        stepFragment.setCurrentStepPos(currentStepPos);
+        return stepFragment;
+    }
+
+    private List<Step> getStepsFromIntent(Intent intent){
+        Bundle extras = intent.getExtras();
+        if (extras.containsKey("StepsJSON")){
+            return new Gson().fromJson(extras.getString("StepsJSON"), new TypeToken<List<Step>>(){}.getType());
+        }
+        else{
+            return new ArrayList<>();
+        }
+    }
+
+    private int getCurrentStepPosFromIntent(Intent parentIntent){
         Bundle extras = parentIntent.getExtras();
-        if (mSteps == null || mSteps.size() == 0){
-            if (extras.containsKey("StepsJSON") && extras.containsKey("currentStep")){
-                String stepJson = extras.getString("StepsJSON");
-                Gson gson = new Gson();
-                mSteps = gson.fromJson(stepJson, new TypeToken<List<Step>>(){}.getType());
-                mCurrentStepPos = extras.getInt("currentStep",0);
-                mCurrentStep = mSteps.get(mCurrentStepPos);
-            }
+        if (extras.containsKey("currentStep")){
+            return extras.getInt("currentStep", 0);
         }
-        mPlayerView = findViewById(R.id.playerView);
-        buildView();
-    }
-
-    private void buildView(){
-        if (mCurrentStep != null){
-            if ( !mCurrentStep.getVideoURL().equals("")){
-                initializePlayer();
-            }
-            else{
-                mPlayerView.setVisibility(View.GONE);
-            }
-            TextView stepDescription = findViewById(R.id.tvStepText);
-            stepDescription.setText(mCurrentStep.getDescription());
+        else{
+            return 0;
         }
-    }
-
-    private void initializePlayer(){
-        if (mExoPlayer == null){
-            Uri videoUri = Uri.parse(mCurrentStep.getVideoURL());
-            mExoPlayer = ExoPlayerFactory.newSimpleInstance(this, new DefaultTrackSelector());
-            mPlayerView.setPlayer(mExoPlayer);
-
-            ExtractorMediaSource.Factory emsFactory = new ExtractorMediaSource.Factory(
-                    new DefaultDataSourceFactory(this, Util.getUserAgent(this, "Baking")));
-            MediaSource videoSource = emsFactory.createMediaSource(videoUri);
-
-            mExoPlayer.prepare(videoSource);
-            mExoPlayer.setPlayWhenReady(true);
-        }
-    }
-
-    private void releasePlayer(){
-        if (mExoPlayer!=null){
-            mExoPlayer.stop();
-            mExoPlayer.release();
-            mExoPlayer = null;
-        }
-
     }
 
     public void onNavClick(View v){
@@ -94,17 +71,20 @@ public class StepDetailActivity extends AppCompatActivity {
             @Override
             public void run() {
                 String buttonClicked = clickedButton.getId() == R.id.btnNext ? "Next" : "Prev";
-                if ( (buttonClicked == "Next" && mCurrentStepPos+1 >= mSteps.size()) ||
-                        (buttonClicked == "Prev" && mCurrentStepPos-1 < 0) ){
+                List<Step> steps = mStepFragment.getSteps();
+                SimpleExoPlayer player = mStepFragment.getExoPlayer();
+                int currentStepPos = mStepFragment.getCurrentStepPos();
+                if ( (buttonClicked == "Next" && currentStepPos+1 >= steps.size()) ||
+                        (buttonClicked == "Prev" && currentStepPos-1 < 0) ){
                     return;
                 }
-                if (mExoPlayer!=null){
-                    mExoPlayer.stop();
+                if (player!=null){
+                    player.stop();
                 }
 
                 Intent nextNavigatedStepIntent = new Intent(StepDetailActivity.this, StepDetailActivity.class);
-                String stepsJson = new Gson().toJson(mSteps);
-                int nextStepPos = buttonClicked == "Next" ? mCurrentStepPos+1: mCurrentStepPos-1;
+                String stepsJson = new Gson().toJson(steps);
+                int nextStepPos = buttonClicked == "Next" ? currentStepPos+1: currentStepPos-1;
                 nextNavigatedStepIntent.putExtra("StepsJSON", stepsJson);
                 nextNavigatedStepIntent.putExtra("currentStep", nextStepPos);
                 finish();
@@ -112,11 +92,5 @@ public class StepDetailActivity extends AppCompatActivity {
 
             }
         }, 0);
-    }
-
-    @Override
-    protected void onDestroy(){
-        super.onDestroy();
-        releasePlayer();
     }
 }

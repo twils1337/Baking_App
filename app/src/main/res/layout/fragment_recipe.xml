@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.RecipeFragment">
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tvRecipeTitle"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/recipeTitleHeight"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/defaultHeaderText"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="@dimen/recipeDetailTitleTextSize"
+            android:textColor="@color/black"
+            android:background="@color/lime" />
+        <LinearLayout
+            android:id="@+id/llIngredientsDetail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvIngredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/defaultPadding"
+                android:text="@string/ingredientsLabel"
+                android:textSize="@dimen/recipeDetailHeaderTextSize"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvIngredientsList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/listPadding"
+                android:text="Ingredients List"
+                android:textSize="@dimen/recipeContentTextSize" />
+            <TextView
+                android:id="@+id/tvStepsDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/stepsLabel"
+                android:textSize="@dimen/recipeDetailHeaderTextSize"
+                android:paddingTop="@dimen/defaultPadding"
+                android:paddingLeft="@dimen/defaultPadding"
+                android:textStyle="bold"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvSteps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/listPadding"/>
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>
