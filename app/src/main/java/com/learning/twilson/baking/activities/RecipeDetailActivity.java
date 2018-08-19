@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -81,10 +80,11 @@ public class RecipeDetailActivity extends AppCompatActivity
     @Override
     public void onClick(int stepClickedIndex) {
         Intent stepDetailIntent = new Intent(this, StepDetailActivity.class);
-        Step step = mRecipe.getSteps().get(stepClickedIndex);
+        List<Step> steps = mRecipe.getSteps();
         Gson gson = new Gson();
-        String stepJson = gson.toJson(step);
-        stepDetailIntent.putExtra("StepJSON", stepJson);
+        String stepJson = gson.toJson(steps);
+        stepDetailIntent.putExtra("StepsJSON", stepJson);
+        stepDetailIntent.putExtra("currentStep", stepClickedIndex);
         startActivity(stepDetailIntent);
     }
 }
