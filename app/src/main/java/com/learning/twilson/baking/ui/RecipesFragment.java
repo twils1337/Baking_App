@@ -23,7 +23,7 @@ import com.learning.twilson.baking.models.Recipe;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import static com.learning.twilson.baking.activities.RecipeDetailActivity.EXTRA_RECIPE_ID;
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -82,10 +82,9 @@ public class RecipesFragment extends Fragment implements RecipeAdapterOnClickHan
     @Override
     public void onClick(int recipeClickedIndex) {
         Intent recipeDetailIntent = new Intent(getActivity(), RecipeDetailActivity.class);
-        Recipe selectRecipe = mRecipes.get(recipeClickedIndex);
-        Gson gson = new Gson();
-        String recipeJson = gson.toJson(selectRecipe);
-        recipeDetailIntent.putExtra("RecipeJSON", recipeJson);
+        String recipeJson = new Gson().toJson(mRecipes);
+        recipeDetailIntent.putExtra("RecipesJSON", recipeJson);
+        recipeDetailIntent.putExtra(EXTRA_RECIPE_ID, recipeClickedIndex);
         startActivity(recipeDetailIntent);
     }
 }

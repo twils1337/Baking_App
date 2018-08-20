@@ -27,6 +27,8 @@ import java.util.List;
  */
 public class RecipeFragment extends Fragment
                             implements StepsAdapterOnClickHandler {
+    private List<Recipe> mRecipes;
+    private int mCurrentRecipePos;
     private Recipe mRecipe;
     private RecyclerView mStepsRV;
 
@@ -93,8 +95,13 @@ public class RecipeFragment extends Fragment
                 ingredient.getIngredient());
     }
 
-    public void setRecipe(Recipe recipe){
-        mRecipe = recipe;
+    public void setRecipes(List<Recipe> recipes){
+        mRecipes = recipes;
+    }
+
+    public void setCurrentRecipePos(int pos){
+        mCurrentRecipePos = pos;
+        mRecipe = mRecipes.get(mCurrentRecipePos);
     }
 
     @Override
