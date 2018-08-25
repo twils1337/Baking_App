@@ -68,8 +68,11 @@ public class RecipesFragment extends Fragment implements RecipeAdapterOnClickHan
 
     private List<String> getNamesForCards() {
         List<String> names = new ArrayList<>();
-        for (Recipe recipe: mRecipes){
-            names.add(recipe.getName());
+        if (mRecipes != null)
+        {
+            for (Recipe recipe: mRecipes){
+                names.add(recipe.getName());
+            }
         }
         return names;
     }
