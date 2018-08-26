@@ -87,7 +87,7 @@ public class RecipesFragment extends Fragment implements RecipeAdapterOnClickHan
         Intent recipeDetailIntent = new Intent(getActivity(), RecipeDetailActivity.class);
         String recipeJson = new Gson().toJson(mRecipes);
         recipeDetailIntent.putExtra("RecipesJSON", recipeJson);
-        recipeDetailIntent.putExtra(EXTRA_RECIPE_ID, recipeClickedIndex);
+        recipeDetailIntent.putExtra(EXTRA_RECIPE_ID, recipeClickedIndex+1);
         startActivity(recipeDetailIntent);
     }
 }

@@ -19,6 +19,7 @@ import com.learning.twilson.baking.interfaces.StepsAdapterOnClickHandler;
 import com.learning.twilson.baking.models.Ingredient;
 import com.learning.twilson.baking.models.Recipe;
 import com.learning.twilson.baking.models.Step;
+import com.learning.twilson.baking.widget.IngredientService;
 
 import java.util.List;
 
@@ -56,6 +57,7 @@ public class RecipeFragment extends Fragment
         buildRecipeTitle(rootView);
         buildIngredientsList(rootView);
         buildStepsList(rootView);
+        IngredientService.startActionGetIngredients(getActivity(), mRecipe);
         return rootView;
     }
 
@@ -88,7 +90,7 @@ public class RecipeFragment extends Fragment
         ingredientsTV.setText(sb.toString());
     }
 
-    private String getFormattedStringForIngredientList(Ingredient ingredient){
+    public static String getFormattedStringForIngredientList(Ingredient ingredient){
         return String.format("• %s %s %s",
                 ingredient.getQuantity().toString(),
                 ingredient.getMeasure().toString(),
@@ -102,6 +104,12 @@ public class RecipeFragment extends Fragment
     public void setCurrentRecipePos(int pos){
         mCurrentRecipePos = pos;
         mRecipe = mRecipes.get(mCurrentRecipePos);
+    }
+    public List<Recipe> getRecipes(){
+        return mRecipes;
+    }
+    public int getCurrentRecipePos(){
+        return mCurrentRecipePos;
     }
 
     @Override

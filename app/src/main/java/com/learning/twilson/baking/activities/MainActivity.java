@@ -1,7 +1,6 @@
 package com.learning.twilson.baking.activities;
 
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,10 +11,6 @@ import com.learning.twilson.baking.ui.RecipesFragment;
 import com.learning.twilson.baking.models.Recipe;
 import com.learning.twilson.baking.utils.ServiceGenerator;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.List;
 
 import retrofit2.Call;
