@@ -74,8 +74,8 @@ public class StepDetailActivity extends AppCompatActivity {
                 List<Step> steps = mStepFragment.getSteps();
                 SimpleExoPlayer player = mStepFragment.getExoPlayer();
                 int currentStepPos = mStepFragment.getCurrentStepPos();
-                if ( (buttonClicked == "Next" && currentStepPos+1 >= steps.size()) ||
-                        (buttonClicked == "Prev" && currentStepPos-1 < 0) ){
+                if ( (buttonClicked.equals("Next") && currentStepPos+1 >= steps.size()) ||
+                     (buttonClicked.equals("Prev") && currentStepPos-1 < 0) ){
                     return;
                 }
                 if (player!=null){
@@ -84,7 +84,7 @@ public class StepDetailActivity extends AppCompatActivity {
 
                 Intent nextNavigatedStepIntent = new Intent(StepDetailActivity.this, StepDetailActivity.class);
                 String stepsJson = new Gson().toJson(steps);
-                int nextStepPos = buttonClicked == "Next" ? currentStepPos+1: currentStepPos-1;
+                int nextStepPos = buttonClicked.equals("Next") ? currentStepPos+1: currentStepPos-1;
                 nextNavigatedStepIntent.putExtra("StepsJSON", stepsJson);
                 nextNavigatedStepIntent.putExtra("currentStep", nextStepPos);
                 finish();

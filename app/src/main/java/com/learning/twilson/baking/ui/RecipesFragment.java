@@ -31,6 +31,8 @@ public class RecipesFragment extends Fragment implements RecipeAdapterOnClickHan
 
     private List<Recipe> mRecipes;
     private RecyclerView mRecipeRV;
+    private boolean mTwoPane;
+    private RecipeAdapterOnClickHandler mHandler;
 
     public RecipesFragment() {
         // Required empty public constructor
@@ -81,13 +83,30 @@ public class RecipesFragment extends Fragment implements RecipeAdapterOnClickHan
         mRecipes = recipes;
     }
 
+    public List<Recipe> getRecipes(){
+        return mRecipes;
+    }
 
+    public void setTwoPane(boolean enabled){
+        mTwoPane = enabled;
+    }
+
+    public void setOnClickHandler(RecipeAdapterOnClickHandler handler){
+        mHandler = handler;
+    }
     @Override
     public void onClick(int recipeClickedIndex) {
-        Intent recipeDetailIntent = new Intent(getActivity(), RecipeDetailActivity.class);
-        String recipeJson = new Gson().toJson(mRecipes);
-        recipeDetailIntent.putExtra("RecipesJSON", recipeJson);
-        recipeDetailIntent.putExtra(EXTRA_RECIPE_ID, recipeClickedIndex+1);
-        startActivity(recipeDetailIntent);
+        if (!mTwoPane){
+            Intent recipeDetailIntent = new Intent(getActivity(), RecipeDetailActivity.class);
+            String recipeJson = new Gson().toJson(mRecipes);
+            recipeDetailIntent.putExtra("RecipesJSON", recipeJson);
+            recipeDetailIntent.putExtra(EXTRA_RECIPE_ID, recipeClickedIndex+1);
+            startActivity(recipeDetailIntent);
+        }
+        else{
+            mHandler.onClick(recipeClickedIndex);
+        }
+
     }
+
 }

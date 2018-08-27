@@ -5,8 +5,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.learning.twilson.baking.R;
 import com.learning.twilson.baking.interfaces.ClientService;
+import com.learning.twilson.baking.interfaces.RecipeAdapterOnClickHandler;
+import com.learning.twilson.baking.ui.RecipeFragment;
 import com.learning.twilson.baking.ui.RecipesFragment;
 import com.learning.twilson.baking.models.Recipe;
 import com.learning.twilson.baking.utils.ServiceGenerator;
@@ -17,22 +21,72 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+                          implements RecipeAdapterOnClickHandler{
 
     private RecipesFragment mRecipesFragment;
+    private RecipeFragment mRecipeFragment;
+    private boolean mTwoPane;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        clearFrags(getSupportFragmentManager());
         setContentView(R.layout.activity_main);
+        mTwoPane = findViewById(R.id.llDoublePane) != null;
         if (savedInstanceState == null) {
             mRecipesFragment = getRecipesFragment();
             loadRecipes();
+        }
+        else{
+            mRecipesFragment = getRecipesFragment();
+            List<Recipe> recipes = new Gson().fromJson(savedInstanceState.getString("RecipesJSON"),
+                    new TypeToken<List<Recipe>>(){}.getType());
+            mRecipesFragment.setRecipes(recipes);
+            buildFragments(true);
+        }
+    }
+
+    private void buildFragments(boolean hasBeenRestored) {
+        FragmentManager manager = getSupportFragmentManager();
+        mRecipesFragment.setTwoPane(mTwoPane);
+        if (mTwoPane){
+            mRecipeFragment = new RecipeFragment();
+            mRecipeFragment.setRecipes(mRecipesFragment.getRecipes());
+            mRecipeFragment.setCurrentRecipePos(0);
+            manager.beginTransaction()
+                    .add(R.id.flRecipesTwoPane, mRecipesFragment)
+                    .add(R.id.flRecipeTwoPane, mRecipeFragment)
+                    .addToBackStack("Double Add")
+                    .commit();
+        }
+        else{
+            if (hasBeenRestored){
+                manager.beginTransaction()
+                        .add(R.id.flRecipes, mRecipesFragment)
+                        .addToBackStack("Single Add")
+                        .commit();
+            }
+            else{
+                manager.beginTransaction()
+                        .add(R.id.flRecipes, mRecipesFragment)
+                        .addToBackStack("Single Add")
+                        .commit();
+            }
+
         }
     }
 
     private RecipesFragment getRecipesFragment(){
         RecipesFragment recipesFragment = new RecipesFragment();
+        recipesFragment.setOnClickHandler(this);
         return recipesFragment;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("RecipesJSON", new Gson().toJson(mRecipesFragment.getRecipes()));
     }
 
     private void loadRecipes(){
@@ -41,12 +95,8 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                List<Recipe> recipes = response.body();
-                mRecipesFragment.setRecipes(recipes);
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .add(R.id.flRecipes, mRecipesFragment)
-                        .commit();
+                mRecipesFragment.setRecipes(response.body());
+                buildFragments(false);
             }
 
             @Override
@@ -54,5 +104,23 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("Loading Recipes", "onFailure: "+t.getMessage() );
             }
         });
+    }
+
+    @Override
+    public void onClick(int recipeClickedIndex) {
+        FragmentManager manager =  getSupportFragmentManager();
+        RecipeFragment recipeFragment = new RecipeFragment();
+        recipeFragment.setRecipes(mRecipesFragment.getRecipes());
+        recipeFragment.setCurrentRecipePos(recipeClickedIndex);
+        manager.beginTransaction()
+                .replace(R.id.flRecipeTwoPane, recipeFragment)
+                .addToBackStack("Update Double").commit();
+        mRecipeFragment = recipeFragment;
+    }
+
+    private void clearFrags(FragmentManager manager){
+        while(manager.getBackStackEntryCount() > 0){
+            manager.popBackStackImmediate();
+        }
     }
 }

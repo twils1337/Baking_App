@@ -18,8 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.RecipeDetailActivity">
-            android:parentActivityName=".MainActivity">
+        <activity android:name=".activities.RecipeDetailActivity"
+            android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
@@ -38,7 +38,7 @@
 
         <service
             android:name=".widget.IngredientService"
-            android:exported="false"></service>
+            android:exported="false" />
     </application>
 
 </manifest>

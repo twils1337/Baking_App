@@ -35,6 +35,7 @@ public class RecipeFragment extends Fragment
 
     public RecipeFragment() {
         // Required empty public constructor
+        setRetainInstance(true);
     }
 
 
@@ -93,7 +94,7 @@ public class RecipeFragment extends Fragment
     public static String getFormattedStringForIngredientList(Ingredient ingredient){
         return String.format("• %s %s %s",
                 ingredient.getQuantity().toString(),
-                ingredient.getMeasure().toString(),
+                ingredient.getMeasure(),
                 ingredient.getIngredient());
     }
 

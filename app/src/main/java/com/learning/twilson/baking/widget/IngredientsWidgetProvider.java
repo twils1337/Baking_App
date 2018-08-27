@@ -5,7 +5,6 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.google.gson.Gson;
@@ -13,19 +12,12 @@ import com.learning.twilson.baking.R;
 
 import com.learning.twilson.baking.activities.MainActivity;
 import com.learning.twilson.baking.activities.RecipeDetailActivity;
-import com.learning.twilson.baking.interfaces.ClientService;
 import com.learning.twilson.baking.models.Ingredient;
 import com.learning.twilson.baking.models.Recipe;
 import com.learning.twilson.baking.ui.RecipeFragment;
-import com.learning.twilson.baking.utils.ServiceGenerator;
 
 
-import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static com.learning.twilson.baking.activities.RecipeDetailActivity.EXTRA_RECIPE_ID;
 
