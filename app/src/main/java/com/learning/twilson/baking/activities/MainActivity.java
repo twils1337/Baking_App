@@ -24,9 +24,15 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity
                           implements RecipeAdapterOnClickHandler{
 
-    private RecipesFragment mRecipesFragment;
+    private RecipesFragment mRecipesFragment = new RecipesFragment();
     private RecipeFragment mRecipeFragment;
     private boolean mTwoPane;
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +49,11 @@ public class MainActivity extends AppCompatActivity
             List<Recipe> recipes = new Gson().fromJson(savedInstanceState.getString("RecipesJSON"),
                     new TypeToken<List<Recipe>>(){}.getType());
             mRecipesFragment.setRecipes(recipes);
-            buildFragments(true);
+            buildFragments();
         }
     }
 
-    private void buildFragments(boolean hasBeenRestored) {
+    private void buildFragments() {
         FragmentManager manager = getSupportFragmentManager();
         mRecipesFragment.setTwoPane(mTwoPane);
         if (mTwoPane){
@@ -61,19 +67,10 @@ public class MainActivity extends AppCompatActivity
                     .commit();
         }
         else{
-            if (hasBeenRestored){
                 manager.beginTransaction()
                         .add(R.id.flRecipes, mRecipesFragment)
                         .addToBackStack("Single Add")
                         .commit();
-            }
-            else{
-                manager.beginTransaction()
-                        .add(R.id.flRecipes, mRecipesFragment)
-                        .addToBackStack("Single Add")
-                        .commit();
-            }
-
         }
     }
 
@@ -96,7 +93,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
                 mRecipesFragment.setRecipes(response.body());
-                buildFragments(false);
+                buildFragments();
             }
 
             @Override
