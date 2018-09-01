@@ -16,7 +16,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RecipeRetriever {
-    private static final int DELAY_MS = 10000;
+    private static final int DELAY_MS = 3000;
 
     private static List<Recipe> mRecipes = new ArrayList<>();
 

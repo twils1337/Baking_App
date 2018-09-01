@@ -41,7 +41,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        RecipeRetriever.fetchRecipes(MainActivity.this, mIdlingResource);
+        List<Recipe> recipes = mRecipesFragment.getRecipes();
+        if (recipes == null || recipes.isEmpty()){
+            RecipeRetriever.fetchRecipes(MainActivity.this, mIdlingResource);
+        }
     }
 
     @Override
@@ -92,23 +95,6 @@ public class MainActivity extends AppCompatActivity
         super.onSaveInstanceState(outState);
         outState.putString("RecipesJSON", new Gson().toJson(mRecipesFragment.getRecipes()));
     }
-
-//    private void loadRecipes(){
-//        ClientService client = ServiceGenerator.createService(ClientService.class);
-//        Call<List<Recipe>> call = client.getRecipes();
-//        call.enqueue(new Callback<List<Recipe>>() {
-//            @Override
-//            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-//                mRecipesFragment.setRecipes(response.body());
-//                buildFragments();
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Recipe>> call, Throwable t) {
-//                Log.e("Loading Recipes", "onFailure: "+t.getMessage() );
-//            }
-//        });
-//    }
 
     @Override
     public void onClick(int recipeClickedIndex) {

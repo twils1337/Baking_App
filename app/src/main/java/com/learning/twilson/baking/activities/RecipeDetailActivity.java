@@ -14,6 +14,7 @@ import com.learning.twilson.baking.R;
 import com.learning.twilson.baking.interfaces.ClientService;
 import com.learning.twilson.baking.models.Recipe;
 import com.learning.twilson.baking.ui.RecipeFragment;
+import com.learning.twilson.baking.utils.RecipeRetriever;
 import com.learning.twilson.baking.utils.ServiceGenerator;
 
 import java.util.List;
@@ -23,7 +24,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class RecipeDetailActivity extends AppCompatActivity{
+public class RecipeDetailActivity extends AppCompatActivity
+                                  implements RecipeRetriever.DelayerCallback{
     private RecipeFragment mRecipeFragment;
     public static final String EXTRA_RECIPE_ID = "com.learning.twilson.baking.RECIPE_ID";
 
@@ -110,5 +112,13 @@ public class RecipeDetailActivity extends AppCompatActivity{
 
             }
         }, 0);
+    }
+
+    @Override
+    public void onDone(List<Recipe> recipes) {
+        if (mRecipeFragment == null){
+            mRecipeFragment = new RecipeFragment();
+        }
+        mRecipeFragment.setRecipes(recipes);
     }
 }

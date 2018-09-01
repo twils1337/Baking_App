@@ -24,6 +24,7 @@ import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -50,20 +51,31 @@ public class InstrumentedTests {
 
     @Test
     public void clickRecipeCard_startsRecipeDetailActivity() {
-        onView(ViewMatchers.withId(R.id.rvRecipeCards)).perform(RecyclerViewActions
+        onView(ViewMatchers.withId(R.id.rvRecipeCards))
+                .perform(RecyclerViewActions
                 .actionOnItemAtPosition(0, click()));
         intended(hasComponent(RecipeDetailActivity.class.getName()));
         onView(withId(R.id.tvRecipeTitle)).check(matches(withText("Nutella Pie")));
     }
 
     @Test
-    public void navigationButonsOnRecipeDetailsWork() {
-        onView(ViewMatchers.withId(R.id.rvRecipeCards)).perform(RecyclerViewActions
+    public void navigationButtonsOnRecipeDetailsWork() {
+        onView(ViewMatchers.withId(R.id.rvRecipeCards))
+                .perform(RecyclerViewActions
                 .actionOnItemAtPosition(0, click()));
         onView(ViewMatchers.withId(R.id.btnNext)).perform(scrollTo()).perform(click());
         onView(withId(R.id.tvRecipeTitle)).check(matches(withText("Brownies")));
         onView(ViewMatchers.withId(R.id.btnPrevious)).perform(scrollTo()).perform(click());
         onView(withId(R.id.tvRecipeTitle)).check(matches(withText("Nutella Pie")));
+    }
+
+    @Test
+    public void videoIsDisplayedInStepActivity(){
+        onView(ViewMatchers.withId(R.id.rvRecipeCards)).perform(RecyclerViewActions
+                .actionOnItemAtPosition(0, click()));
+        onView(ViewMatchers.withId(R.id.rvSteps)).perform(RecyclerViewActions
+                .actionOnItemAtPosition(0, RecyclerViewCustomAction.clickOnStepDetailButton(R.id.btnStepInfo)));
+        onView(withId(R.id.playerView)).check(matches(isDisplayed()));
     }
 
 
