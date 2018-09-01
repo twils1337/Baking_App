@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity
         if (mRecipesFragment == null){
             mRecipesFragment = getRecipesFragment();
         }
+        mRecipesFragment.setOnClickHandler(this);
         mRecipesFragment.setRecipes(recipes);
         buildFragments();
     }
