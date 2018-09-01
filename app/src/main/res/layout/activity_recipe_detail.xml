@@ -15,24 +15,24 @@
 
         <Button
             android:id="@+id/btnPrevious"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="@dimen/navigationButtonWidth"
+            android:layout_height="@dimen/navigationButtonHeight"
+            android:layout_marginStart="@dimen/prevButtonStartMargin"
+            android:layout_marginTop="@dimen/navigationButtonTopMargin"
             android:onClick="onNavClick"
-            android:text="Previous"
-            android:textSize="15sp"
+            android:text="@string/prevButtonText"
+            android:textSize="@dimen/navButtonTextSize"
             app:layout_constraintTop_toBottomOf="@+id/flRecipe"/>
 
         <Button
             android:id="@+id/btnNext"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="@dimen/navigationButtonWidth"
+            android:layout_height="@dimen/navigationButtonHeight"
+            android:layout_marginEnd="@dimen/nextButtonEndMargin"
+            android:layout_marginTop="@dimen/navigationButtonTopMargin"
             android:onClick="onNavClick"
-            android:text="Next"
-            android:textSize="15dp"
+            android:text="@string/nextButtonText"
+            android:textSize="@dimen/navButtonTextSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/flRecipe" />
         </android.support.constraint.ConstraintLayout>

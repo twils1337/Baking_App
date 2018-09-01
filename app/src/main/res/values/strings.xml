@@ -9,4 +9,9 @@
     <string name="stepsLabel">Steps:</string>
     <string name="defaultStepsDescription">Step to bake your item.</string>
 
+    <string name="prevButtonText">Previous</string>
+    <string name="nextButtonText">Next</string>
+
+    <string name="ingredientsListLabel">Ingredients List</string>
+
 </resources>

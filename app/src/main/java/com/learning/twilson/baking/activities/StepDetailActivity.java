@@ -24,15 +24,23 @@ public class StepDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_detail);
-        if (savedInstanceState == null){
+        if (savedInstanceState == null)
+        {
             mStepFragment = getStepFragment();
-
-            FragmentManager fragmentManager = getSupportFragmentManager();
-
-            fragmentManager.beginTransaction()
-                    .add(R.id.flStep, mStepFragment)
-                    .commit();
         }
+        else{
+          mStepFragment = new StepFragment();
+          List<Step> steps = new Gson().fromJson(savedInstanceState.getString("StepsJSON"),
+                  new TypeToken<List<Step>>(){}.getType());
+          mStepFragment.setSteps(steps);
+          mStepFragment.setCurrentStepPos(savedInstanceState.getInt("currentStep"));
+        }
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        fragmentManager.beginTransaction()
+                .add(R.id.flStep, mStepFragment)
+                .commit();
     }
 
     private StepFragment getStepFragment(){
@@ -64,6 +72,13 @@ public class StepDetailActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("StepsJSON", new Gson().toJson(mStepFragment.getSteps()));
+        outState.putInt("currentStep", mStepFragment.getCurrentStepPos());
+    }
+
     public void onNavClick(View v){
         final View clickedButton = v;
         final Handler handler = new Handler();
@@ -81,7 +96,6 @@ public class StepDetailActivity extends AppCompatActivity {
                 if (player!=null){
                     player.stop();
                 }
-
                 Intent nextNavigatedStepIntent = new Intent(StepDetailActivity.this, StepDetailActivity.class);
                 String stepsJson = new Gson().toJson(steps);
                 int nextStepPos = buttonClicked.equals("Next") ? currentStepPos+1: currentStepPos-1;

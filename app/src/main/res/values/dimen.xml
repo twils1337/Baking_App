@@ -14,4 +14,39 @@
 
     <dimen name="stepsDescriptionTextSize">20sp</dimen>
     <dimen  name="stepsInfoButtonSize">20dp</dimen>
+
+    <dimen name="navigationButtonWidth">100dp</dimen>
+    <dimen name="navigationButtonHeight">50dp</dimen>
+    <dimen name="navigationButtonTopMargin">16dp</dimen>
+    <dimen name="prevButtonStartMargin">16dp</dimen>
+    <dimen name="nextButtonEndMargin">8dp</dimen>
+    <dimen name="navButtonTextSize">15dp</dimen>
+    <dimen name="navButtonBottomMargin">8dp</dimen>
+    <dimen name="navButtonStepMarginEnd">16dp</dimen>
+
+    <dimen name="stepConstraintAbsX">0dp</dimen>
+    <dimen name="stepConstraintAbsY">200dp</dimen>
+
+    <dimen name="exoPlayerWidth">200dp</dimen>
+
+    <dimen name="constraintGuidePercent">0.8</dimen>
+
+    <dimen name="tvStepDescriptionMarginStart">16dp</dimen>
+    <dimen name="tvStepDescriptionMarginEnd">16dp</dimen>
+    <dimen name="tvStepDescriptionMarginTop">8dp</dimen>
+    <dimen name="tvStepDescriptionTextSize">20sp</dimen>
+
+    <dimen name="widgetIngredientsTextSize">10dp</dimen>
+    <dimen name="widgetIngredientsPadding">8dp</dimen>
+
+    <dimen name="tvStepDescriptionWidth">0dp</dimen>
+    <dimen name="stepHorizontalWeight">.2</dimen>
+    <dimen name="tvStepDetailMarginEnd">55dp</dimen>
+    <dimen name="tvStepDetailMarginTop"></dimen>
+    <dimen name="tvStepDetailPaddingRight">8dp</dimen>
+    <dimen name="tvStepDetailHorizontalBias">0.0</dimen>
+    <dimen name="paddingForButtonInfo">8dp</dimen>
+
+    <dimen name="lineSeparatorHeight">7dp</dimen>
+    <dimen name="lineSeparatorMargins">8dp</dimen>
 </resources>

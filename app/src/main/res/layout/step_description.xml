@@ -7,17 +7,17 @@
     android:orientation="horizontal">
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/tvStepsDescription"
-        android:layout_width="0dp"
+        android:id="@+id/tvStepsDetail"
+        android:layout_width="@dimen/tvStepDescriptionWidth"
         android:layout_height="wrap_content"
-        app:layout_constraintHorizontal_weight=".2"
-        android:layout_marginEnd="55dp"
-        android:layout_marginTop="8dp"
-        android:paddingRight="8dp"
+        app:layout_constraintHorizontal_weight="@dimen/stepHorizontalWeight"
+        android:layout_marginEnd="@dimen/tvStepDetailMarginEnd"
+        android:layout_marginTop="@dimen/tvStepDetailMarginTop"
+        android:paddingRight="@dimen/tvStepDetailPaddingRight"
         android:text="@string/defaultStepsDescription"
         android:textSize="@dimen/stepsDescriptionTextSize"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="@dimen/tvStepDetailHorizontalBias"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,23 +25,22 @@
         android:id="@+id/btnStepInfo"
         android:layout_width="@dimen/stepsInfoButtonSize"
         android:layout_height="@dimen/stepsInfoButtonSize"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginBottom="@dimen/paddingForButtonInfo"
+        android:layout_marginEnd="@dimen/paddingForButtonInfo"
+        android:layout_marginStart="@dimen/paddingForButtonInfo"
         android:background="@drawable/info_button"
-        android:gravity=""
         app:layout_constraintBottom_toTopOf="@+id/line_separator"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tvStepsDescription" />
+        app:layout_constraintStart_toEndOf="@+id/tvStepsDetail" />
 
     <View
         android:id="@+id/line_separator"
         android:layout_width="wrap_content"
-        android:layout_height="7dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="@dimen/lineSeparatorHeight"
+        android:layout_marginEnd="@dimen/lineSeparatorMargins"
+        android:layout_marginStart="@dimen/lineSeparatorMargins"
+        android:layout_marginTop="@dimen/lineSeparatorMargins"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvStepsDescription" />
+        app:layout_constraintTop_toBottomOf="@+id/tvStepsDetail" />
 </android.support.constraint.ConstraintLayout>

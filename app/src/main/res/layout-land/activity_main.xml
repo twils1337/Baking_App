@@ -11,10 +11,10 @@
     <FrameLayout
         android:id="@+id/flRecipesTwoPane"
         android:name="com.learning.twilson.baking.ui.RecipesFragment"
-        android:layout_width="250dp"
+        android:layout_width="@dimen/recipesTwoPaneWidth"
         android:layout_height="match_parent"/>
     <View
-        android:layout_width="1dp"
+        android:layout_width="@dimen/separatorWidth"
         android:layout_height="match_parent"
         android:background="@android:color/darker_gray"/>
     <ScrollView

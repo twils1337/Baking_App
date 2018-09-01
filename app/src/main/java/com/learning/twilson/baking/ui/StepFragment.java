@@ -30,23 +30,20 @@ public class StepFragment extends Fragment {
     private Step mCurrentStep;
     private PlayerView mPlayerView;
     private SimpleExoPlayer mExoPlayer;
-    public Integer mCurrentStepPos;
+    private Integer mCurrentStepPos;
+
 
     public StepFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_step, container, false);
-        if (savedInstanceState == null){
-            mPlayerView = rootView.findViewById(R.id.playerView);
-            buildView(rootView);
-        }
-
+        mPlayerView = rootView.findViewById(R.id.playerView);
+        buildView(rootView);
         return rootView;
     }
 
@@ -62,7 +59,6 @@ public class StepFragment extends Fragment {
         mCurrentStepPos = pos;
         setCurrentStep(mSteps.get(pos));
     }
-
 
     private void buildView(View rootView){
         if (mCurrentStep != null){
@@ -92,7 +88,7 @@ public class StepFragment extends Fragment {
         }
     }
 
-    private void releasePlayer(){
+    public void releasePlayer(){
         if (mExoPlayer!=null){
             mExoPlayer.stop();
             mExoPlayer.release();

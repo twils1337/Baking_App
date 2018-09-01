@@ -14,7 +14,6 @@ import com.learning.twilson.baking.R;
 import com.learning.twilson.baking.interfaces.ClientService;
 import com.learning.twilson.baking.models.Recipe;
 import com.learning.twilson.baking.ui.RecipeFragment;
-import com.learning.twilson.baking.utils.RecipeRetriever;
 import com.learning.twilson.baking.utils.ServiceGenerator;
 
 import java.util.List;
@@ -24,8 +23,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class RecipeDetailActivity extends AppCompatActivity
-                                  implements RecipeRetriever.DelayerCallback{
+public class RecipeDetailActivity extends AppCompatActivity{
     private RecipeFragment mRecipeFragment;
     public static final String EXTRA_RECIPE_ID = "com.learning.twilson.baking.RECIPE_ID";
 
@@ -36,33 +34,26 @@ public class RecipeDetailActivity extends AppCompatActivity
         if (savedInstanceState == null){
             Bundle extras = getIntent().getExtras();
             if (extras.containsKey("RecipesJSON")){
-                mRecipeFragment = getRecipeFragment();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-
-                fragmentManager.beginTransaction()
-                        .add(R.id.flRecipe, mRecipeFragment)
-                        .commit();
+                mRecipeFragment = getRecipeFragment(extras);
+                AddFragmentToLayout();
             }
             else{
-                ClientService client = ServiceGenerator.createService(ClientService.class);
-                Call<List<Recipe>> call = client.getRecipes();
-                call.enqueue(new Callback<List<Recipe>>() {
-                    @Override
-                    public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                        Bundle extras = getIntent().getExtras();
-                        mRecipeFragment = getRecipeFragmentFromInternet(response.body(), extras);
-                        getSupportFragmentManager().beginTransaction()
-                                .add(R.id.flRecipe, mRecipeFragment)
-                                .commit();
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                        Log.e("Loading Recipes", "onFailure: "+t.getMessage() );
-                    }
-                });
+                loadRecipes();
             }
         }
+        else{
+            if (savedInstanceState.containsKey("RecipesJSON")){
+                mRecipeFragment = getRecipeFragment(savedInstanceState);
+                AddFragmentToLayout();
+            }
+        }
+    }
+
+    private void AddFragmentToLayout() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .add(R.id.flRecipe, mRecipeFragment)
+                .commit();
     }
 
     private RecipeFragment getRecipeFragmentFromInternet(List<Recipe> recipes, Bundle extras){
@@ -73,16 +64,14 @@ public class RecipeDetailActivity extends AppCompatActivity
         return recipeFragment;
     }
 
-    private RecipeFragment getRecipeFragment(){
+    private RecipeFragment getRecipeFragment(Bundle bundle){
         RecipeFragment recipeFragment = new RecipeFragment();
         List<Recipe> recipes = null;
-        Intent parentIntent = getIntent();
-        Bundle extras = parentIntent.getExtras();
-        if (extras.containsKey("RecipesJSON")){
-            String recipeJson = extras.getString("RecipesJSON");
+        if (bundle.containsKey("RecipesJSON")){
+            String recipeJson = bundle.getString("RecipesJSON");
             recipes = new Gson().fromJson(recipeJson, new TypeToken<List<Recipe>>(){}.getType());
         }
-        int recipePos = extras.getInt(EXTRA_RECIPE_ID, 0)-1;
+        int recipePos = bundle.getInt(EXTRA_RECIPE_ID, 0)-1;
         recipeFragment.setRecipes(recipes);
         recipeFragment.setCurrentRecipePos(recipePos);
         return recipeFragment;
@@ -114,11 +103,22 @@ public class RecipeDetailActivity extends AppCompatActivity
         }, 0);
     }
 
-    @Override
-    public void onDone(List<Recipe> recipes) {
-        if (mRecipeFragment == null){
-            mRecipeFragment = new RecipeFragment();
-        }
-        mRecipeFragment.setRecipes(recipes);
+    public void loadRecipes(){
+        ClientService client = ServiceGenerator.createService(ClientService.class);
+        Call<List<Recipe>> call = client.getRecipes();
+        call.enqueue(new Callback<List<Recipe>>() {
+            @Override
+            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+                Bundle extras = getIntent().getExtras();
+                mRecipeFragment = getRecipeFragmentFromInternet(response.body(), extras);
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.flRecipe, mRecipeFragment)
+                        .commit();
+            }
+            @Override
+            public void onFailure(Call<List<Recipe>> call, Throwable t) {
+                Log.e("Loading Recipes", "onFailure: "+t.getMessage() );
+            }
+        });
     }
 }

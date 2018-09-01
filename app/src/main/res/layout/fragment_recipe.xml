@@ -40,10 +40,10 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/listPadding"
-                android:text="Ingredients List"
+                android:text="@string/ingredientsListLabel"
                 android:textSize="@dimen/recipeContentTextSize" />
             <TextView
-                android:id="@+id/tvStepsDescription"
+                android:id="@+id/tvStepsDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/stepsLabel"

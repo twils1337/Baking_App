@@ -47,7 +47,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepHolder>{
 
     public class StepHolder extends RecyclerView.ViewHolder
                             implements OnClickListener{
-        @BindView(R.id.tvStepsDescription)
+        @BindView(R.id.tvStepsDetail)
         TextView tvSteps;
 
         @BindView(R.id.btnStepInfo)

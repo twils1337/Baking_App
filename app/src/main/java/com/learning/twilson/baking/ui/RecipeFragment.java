@@ -3,6 +3,7 @@ package com.learning.twilson.baking.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -44,7 +45,9 @@ public class RecipeFragment extends Fragment
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         if (savedInstanceState != null){
-            mRecipe = new Gson().fromJson(savedInstanceState.getString("RecipeJson"), Recipe.class);
+            if (savedInstanceState.containsKey("RecipeJson")){
+                mRecipe = new Gson().fromJson(savedInstanceState.getString("RecipeJson"), Recipe.class);
+            }
         }
         Intent parentIntent = getActivity().getIntent();
         Bundle extras = parentIntent.getExtras();
@@ -122,5 +125,11 @@ public class RecipeFragment extends Fragment
         stepDetailIntent.putExtra("StepsJSON", stepJson);
         stepDetailIntent.putExtra("currentStep", stepClickedIndex);
         startActivity(stepDetailIntent);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("RecipeJson", new Gson().toJson(mRecipe));
     }
 }

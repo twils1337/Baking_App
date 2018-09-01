@@ -12,13 +12,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:context=".activities.StepDetailActivity"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="200dp">
+            tools:layout_editor_absoluteX="@dimen/stepConstraintAbsX"
+            tools:layout_editor_absoluteY="@dimen/stepConstraintAbsY">
 
             <com.google.android.exoplayer2.ui.SimpleExoPlayerView
                 android:id="@+id/playerView"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="@dimen/exoPlayerWidth"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/horizontalHalf"
@@ -29,16 +29,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.8" />
+                app:layout_constraintGuide_percent="@dimen/constraintGuidePercent" />
 
             <TextView
                 android:id="@+id/tvStepText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:textSize="20sp"
+                android:layout_marginEnd="@dimen/tvStepDescriptionMarginEnd"
+                android:layout_marginStart="@dimen/tvStepDescriptionMarginStart"
+                android:layout_marginTop="@dimen/tvStepDescriptionMarginTop"
+                android:textSize="@dimen/tvStepDescriptionTextSize"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/playerView" />

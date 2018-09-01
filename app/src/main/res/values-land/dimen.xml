@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="recipesTwoPaneWidth">250dp</dimen>
+    <dimen name="separatorWidth">1dp</dimen>
+
+
+</resources>

@@ -12,14 +12,14 @@
         android:layout_height="wrap_content"
         android:text="Recipe"
         android:gravity="center_vertical"
-        android:textSize="10sp"
+        android:textSize="@dimen/widgetIngredientsTextSize"
         android:layout_centerHorizontal="true"/>
     <TextView
         android:id="@+id/tvIngredients"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:textSize="10sp"
+        android:padding="@dimen/widgetIngredientsPadding"
+        android:textSize="@dimen/widgetIngredientsTextSize"
         android:layout_below="@id/tvWidgetRecipe"/>
 
 </RelativeLayout>
