@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.google.android.exoplayer2.util.Util;
 import com.learning.twilson.baking.R;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.gson.Gson;
@@ -28,6 +29,8 @@ public class StepDetailActivity extends AppCompatActivity
     private StepFragment mStepFragment;
     private StepsFragment mStepsFragment;
     private boolean mTwoPane;
+    private long mPlayPosition = 0;
+    private boolean mIsAutoplay = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,11 +136,33 @@ public class StepDetailActivity extends AppCompatActivity
                         .add(R.id.flStep, mStepFragment)
                         .addToBackStack("Single Add")
                         .commit();
-
             }
         }
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23){
+            mStepFragment.releasePlayer();
+        }
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPlayPosition = mStepFragment.getExoPlayer().getCurrentPosition();
+        mIsAutoplay = mStepFragment.getExoPlayer().getPlayWhenReady();
+        if (Util.SDK_INT <= 23){
+            mStepFragment.releasePlayer();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mStepFragment.getExoPlayer().seekTo(mPlayPosition);
+        mStepFragment.getExoPlayer().setPlayWhenReady(mIsAutoplay);
     }
 
     public void onNavClick(View v){
