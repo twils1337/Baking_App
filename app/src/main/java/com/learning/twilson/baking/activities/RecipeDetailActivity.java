@@ -1,6 +1,7 @@
 package com.learning.twilson.baking.activities;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -24,13 +25,16 @@ import retrofit2.Response;
 
 
 public class RecipeDetailActivity extends AppCompatActivity{
-    private RecipeFragment mRecipeFragment;
     public static final String EXTRA_RECIPE_ID = "com.learning.twilson.baking.RECIPE_ID";
+
+    private RecipeFragment mRecipeFragment;
+    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
+        mTwoPane = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         if (savedInstanceState == null){
             Bundle extras = getIntent().getExtras();
             if (extras.containsKey("RecipesJSON")){
@@ -83,21 +87,27 @@ public class RecipeDetailActivity extends AppCompatActivity{
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                String buttonClicked = clickedButton.getId() == R.id.btnNext ? "Next" : "Prev";
-                List<Recipe> recipes = mRecipeFragment.getRecipes();
-                int currentRecipePos = mRecipeFragment.getCurrentRecipePos();
-                if ( (buttonClicked.equals("Next") && currentRecipePos+1 >= recipes.size()) ||
-                     (buttonClicked.equals("Prev") && currentRecipePos-1 < 0) ){
-                    return;
+                if (mTwoPane){
+                    
+                }
+                else{
+                    String buttonClicked = clickedButton.getId() == R.id.btnNext ? "Next" : "Prev";
+                    List<Recipe> recipes = mRecipeFragment.getRecipes();
+                    int currentRecipePos = mRecipeFragment.getCurrentRecipePos();
+                    if ( (buttonClicked.equals("Next") && currentRecipePos+1 >= recipes.size()) ||
+                            (buttonClicked.equals("Prev") && currentRecipePos-1 < 0) ){
+                        return;
+                    }
+
+                    Intent nextNavigatedStepIntent = new Intent(RecipeDetailActivity.this, RecipeDetailActivity.class);
+                    String recipeGson = new Gson().toJson(recipes);
+                    int nextStepPos = buttonClicked.equals("Next") ? currentRecipePos+2: currentRecipePos;
+                    nextNavigatedStepIntent.putExtra("RecipesJSON", recipeGson);
+                    nextNavigatedStepIntent.putExtra(EXTRA_RECIPE_ID, nextStepPos);
+                    finish();
+                    startActivity(nextNavigatedStepIntent);
                 }
 
-                Intent nextNavigatedStepIntent = new Intent(RecipeDetailActivity.this, RecipeDetailActivity.class);
-                String recipeGson = new Gson().toJson(recipes);
-                int nextStepPos = buttonClicked.equals("Next") ? currentRecipePos+2: currentRecipePos;
-                nextNavigatedStepIntent.putExtra("RecipesJSON", recipeGson);
-                nextNavigatedStepIntent.putExtra(EXTRA_RECIPE_ID, nextStepPos);
-                finish();
-                startActivity(nextNavigatedStepIntent);
 
             }
         }, 0);

@@ -7,7 +7,7 @@
     android:layout_marginBottom="@dimen/cardViewMargins">
 
     <TextView
-        android:id="@+id/tvRecipeName"
+        android:id="@+id/tvCard"
         android:layout_width="match_parent"
         android:layout_height="@dimen/cardHeight"
         android:gravity="center"

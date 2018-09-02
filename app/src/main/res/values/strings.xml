@@ -3,7 +3,7 @@
 
     <string name="defaultCardViewText">Recipe</string>
 
-    <string name="defaultHeaderText">Recipe</string>
+    <string name="defaultHeaderText">Card</string>
     <string name="ingredientsLabel">Ingredients:</string>
 
     <string name="stepsLabel">Steps:</string>
@@ -13,5 +13,8 @@
     <string name="nextButtonText">Next</string>
 
     <string name="ingredientsListLabel">Ingredients List</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

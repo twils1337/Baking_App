@@ -3,5 +3,5 @@
     <dimen name="recipesTwoPaneWidth">250dp</dimen>
     <dimen name="separatorWidth">1dp</dimen>
 
-
+    <dimen name="rvStepsWidth">300dp</dimen>
 </resources>

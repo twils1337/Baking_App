@@ -26,12 +26,14 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class StepFragment extends Fragment {
+
     private List<Step> mSteps;
     private Step mCurrentStep;
     private PlayerView mPlayerView;
     private SimpleExoPlayer mExoPlayer;
     private Integer mCurrentStepPos;
-
+    private long mPlayPosition = 0;
+    private boolean mAutoPlay = true;
 
     public StepFragment() {
         // Required empty public constructor
@@ -62,14 +64,40 @@ public class StepFragment extends Fragment {
 
     private void buildView(View rootView){
         if (mCurrentStep != null){
-            if ( !mCurrentStep.getVideoURL().equals("")){
-                initializePlayer();
-            }
-            else{
+            if ( mCurrentStep.getVideoURL().equals("")){
                 mPlayerView.setVisibility(View.GONE);
             }
             TextView stepDescription = rootView.findViewById(R.id.tvStepText);
             stepDescription.setText(mCurrentStep.getDescription());
+        }
+    }
+
+    public void setPlayPosition(long position){
+        mPlayPosition = position;
+    }
+
+    public void setAutoPlay(boolean autoPlay){
+        mAutoPlay = autoPlay;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23){
+            if (mCurrentStep != null){
+                initializePlayer();
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Util.SDK_INT <= 23 || mExoPlayer == null){
+            if (mCurrentStep != null){
+                initializePlayer();
+            }
+
         }
     }
 
@@ -84,7 +112,8 @@ public class StepFragment extends Fragment {
             MediaSource videoSource = emsFactory.createMediaSource(videoUri);
 
             mExoPlayer.prepare(videoSource);
-            mExoPlayer.setPlayWhenReady(true);
+            mExoPlayer.setPlayWhenReady(mAutoPlay);
+            mExoPlayer.seekTo(mPlayPosition);
         }
     }
 
@@ -110,8 +139,18 @@ public class StepFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        releasePlayer();
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23){
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23){
+            releasePlayer();
+        }
     }
 }

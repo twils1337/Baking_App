@@ -2,6 +2,7 @@ package com.learning.twilson.baking.ui;
 
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -15,7 +16,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.learning.twilson.baking.R;
 import com.learning.twilson.baking.activities.StepDetailActivity;
-import com.learning.twilson.baking.adapters.StepsAdapter;
+import com.learning.twilson.baking.adapters.StepAdapter;
 import com.learning.twilson.baking.interfaces.StepsAdapterOnClickHandler;
 import com.learning.twilson.baking.models.Ingredient;
 import com.learning.twilson.baking.models.Recipe;
@@ -44,8 +45,8 @@ public class RecipeFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        if (savedInstanceState != null){
-            if (savedInstanceState.containsKey("RecipeJson")){
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey("RecipeJson")) {
                 mRecipe = new Gson().fromJson(savedInstanceState.getString("RecipeJson"), Recipe.class);
             }
         }
@@ -78,7 +79,7 @@ public class RecipeFragment extends Fragment
         mStepsRV = rootView.findViewById(R.id.rvSteps);
         LinearLayoutManager llManager = new LinearLayoutManager(getActivity());
         mStepsRV.setLayoutManager(llManager);
-        mStepsRV.setAdapter(new StepsAdapter(mRecipe.getSteps(), this));
+        mStepsRV.setAdapter(new StepAdapter(mRecipe.getSteps(), this));
     }
 
     private void populateIngredientsList(List<Ingredient> ingredients, View rootView) {
@@ -118,13 +119,13 @@ public class RecipeFragment extends Fragment
 
     @Override
     public void onClick(int stepClickedIndex) {
-        Intent stepDetailIntent = new Intent(getActivity(), StepDetailActivity.class);
-        List<Step> steps = mRecipe.getSteps();
-        Gson gson = new Gson();
-        String stepJson = gson.toJson(steps);
-        stepDetailIntent.putExtra("StepsJSON", stepJson);
-        stepDetailIntent.putExtra("currentStep", stepClickedIndex);
-        startActivity(stepDetailIntent);
+            Intent stepDetailIntent = new Intent(getActivity(), StepDetailActivity.class);
+            List<Step> steps = mRecipe.getSteps();
+            Gson gson = new Gson();
+            String stepJson = gson.toJson(steps);
+            stepDetailIntent.putExtra("StepsJSON", stepJson);
+            stepDetailIntent.putExtra("currentStep", stepClickedIndex);
+            startActivity(stepDetailIntent);
     }
 
     @Override

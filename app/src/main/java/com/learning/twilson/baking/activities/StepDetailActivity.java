@@ -1,6 +1,7 @@
 package com.learning.twilson.baking.activities;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -11,36 +12,60 @@ import com.learning.twilson.baking.R;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.learning.twilson.baking.interfaces.StepsAdapterOnClickHandler;
 import com.learning.twilson.baking.models.Step;
 import com.learning.twilson.baking.ui.StepFragment;
+import com.learning.twilson.baking.ui.StepsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class StepDetailActivity extends AppCompatActivity {
+public class StepDetailActivity extends AppCompatActivity
+                                implements StepsAdapterOnClickHandler{
+    public static final String AUTO_PLAY = "auto_play";
+    public static final String PLAY_POSITION = "position";
+
     private StepFragment mStepFragment;
+    private StepsFragment mStepsFragment;
+    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_detail);
+        mTwoPane = findViewById(R.id.flStepsTwoPane) != null;
+        clearFragments(getSupportFragmentManager());
         if (savedInstanceState == null)
         {
             mStepFragment = getStepFragment();
         }
-        else{
-          mStepFragment = new StepFragment();
-          List<Step> steps = new Gson().fromJson(savedInstanceState.getString("StepsJSON"),
-                  new TypeToken<List<Step>>(){}.getType());
-          mStepFragment.setSteps(steps);
-          mStepFragment.setCurrentStepPos(savedInstanceState.getInt("currentStep"));
+        else if (mStepsFragment == null){
+            if (mStepFragment == null){
+                mStepFragment = new StepFragment();
+            }
+            mStepFragment = new StepFragment();
         }
+        buildView();
+    }
 
+    private void buildView(){
         FragmentManager fragmentManager = getSupportFragmentManager();
-
-        fragmentManager.beginTransaction()
-                .add(R.id.flStep, mStepFragment)
-                .commit();
+        if (mTwoPane){
+            mStepsFragment = new StepsFragment();
+            mStepsFragment.setSteps(mStepFragment.getSteps());
+            mStepsFragment.setHandler(this);
+            fragmentManager.beginTransaction()
+                    .add(R.id.flStepsTwoPane, mStepsFragment)
+                    .add(R.id.flStepTwoPane, mStepFragment)
+                    .addToBackStack("Double Add")
+                    .commit();
+        }
+        else{
+            fragmentManager.beginTransaction()
+                    .add(R.id.flStep, mStepFragment)
+                    .addToBackStack("Single Add")
+                    .commit();
+        }
     }
 
     private StepFragment getStepFragment(){
@@ -77,6 +102,42 @@ public class StepDetailActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putString("StepsJSON", new Gson().toJson(mStepFragment.getSteps()));
         outState.putInt("currentStep", mStepFragment.getCurrentStepPos());
+        outState.putLong(PLAY_POSITION, mStepFragment.getExoPlayer().getCurrentPosition());
+        outState.putBoolean(AUTO_PLAY, mStepFragment.getExoPlayer().getPlayWhenReady());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        clearFragments(getSupportFragmentManager());
+        if (savedInstanceState != null){
+            List<Step> steps = new Gson().fromJson(savedInstanceState.getString("StepsJSON"),
+                    new TypeToken<List<Step>>(){}.getType());
+            mStepFragment.setSteps(steps);
+            mStepFragment.setCurrentStepPos(savedInstanceState.getInt("currentStep"));
+            mStepFragment.setPlayPosition(savedInstanceState.getLong(PLAY_POSITION));
+            mStepFragment.setAutoPlay(savedInstanceState.getBoolean(AUTO_PLAY));
+            mTwoPane = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+            FragmentManager manager = getSupportFragmentManager();
+            if (mTwoPane){
+                mStepsFragment.setSteps(mStepFragment.getSteps());
+                mStepsFragment.setHandler(this);
+                manager.beginTransaction()
+                        .add(R.id.flStepsTwoPane, mStepsFragment)
+                        .add(R.id.flStepTwoPane, mStepFragment)
+                        .addToBackStack("Double Add")
+                        .commit();
+            }
+            else{
+                manager.beginTransaction()
+                        .add(R.id.flStep, mStepFragment)
+                        .addToBackStack("Single Add")
+                        .commit();
+
+            }
+        }
+
+
     }
 
     public void onNavClick(View v){
@@ -106,5 +167,22 @@ public class StepDetailActivity extends AppCompatActivity {
 
             }
         }, 0);
+    }
+
+    private void clearFragments(FragmentManager manager){
+        while(manager.getBackStackEntryCount() > 0){
+            manager.popBackStackImmediate();
+        }
+    }
+
+    @Override
+    public void onClick(int stepClickedIndex) {
+        FragmentManager manager = getSupportFragmentManager();
+        mStepFragment.setCurrentStepPos(stepClickedIndex);
+        manager.beginTransaction()
+                .detach(mStepFragment)
+                .attach(mStepFragment)
+                .addToBackStack("Replace Step")
+                .commit();
     }
 }

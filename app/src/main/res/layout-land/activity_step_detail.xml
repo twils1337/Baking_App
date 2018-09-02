@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.MainActivity"
+    android:id="@+id/llDoublePane"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="horizontal">
+    <FrameLayout
+        android:id="@+id/flStepsTwoPane"
+        android:name="com.learning.twilson.baking.ui.RecipesFragment"
+        android:layout_width="@dimen/recipesTwoPaneWidth"
+        android:layout_height="match_parent"/>
+    <View
+        android:layout_width="@dimen/separatorWidth"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <FrameLayout
+            android:id="@+id/flStepTwoPane"
+            android:name="com.learning.twilson.baking.ui.RecipeFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </ScrollView>
+</LinearLayout>

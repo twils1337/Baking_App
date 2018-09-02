@@ -5,69 +5,65 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
 
 import com.learning.twilson.baking.R;
 import com.learning.twilson.baking.interfaces.StepsAdapterOnClickHandler;
-import com.learning.twilson.baking.models.Step;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepHolder>{
-    private List<Step> mSteps;
-    private final StepsAdapterOnClickHandler mParentClickListener;
+public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsHolder> {
+    private List<String> mStepDescriptions;
+    private StepsAdapterOnClickHandler mHandler;
 
-    public StepsAdapter(List<Step> steps, StepsAdapterOnClickHandler handler){
-        mSteps = steps;
-        mParentClickListener = handler;
+    public StepsAdapter(List<String> steps, StepsAdapterOnClickHandler handler) {
+        mStepDescriptions = steps;
+        mHandler = handler;
     }
 
     @Override
-    public int getItemCount() {
-        return mSteps == null ? 0 : mSteps.size();
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull StepHolder holder, int position) {
-        holder.bind(mSteps.get(position).getDescription());
+    public void onBindViewHolder(@NonNull StepsHolder holder, int position) {
+        holder.bind(mStepDescriptions.get(position));
     }
 
     @NonNull
     @Override
-    public StepHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public StepsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.step_description, parent, false);
-        return new StepHolder(view);
+        View view = inflater.inflate(R.layout.card_item, parent, false);
+        return new StepsHolder(view);
     }
 
-    public class StepHolder extends RecyclerView.ViewHolder
-                            implements OnClickListener{
-        @BindView(R.id.tvStepsDetail)
-        TextView tvSteps;
+    @Override
+    public int getItemCount() {
+        return mStepDescriptions != null ? mStepDescriptions.size() : 0;
+    }
 
-        @BindView(R.id.btnStepInfo)
-        ImageButton btnStepsInfo;
+    public class StepsHolder extends RecyclerView.ViewHolder
+                             implements OnClickListener{
+        @BindView(R.id.tvCard)
+        TextView tvCard;
 
-        public StepHolder(View itemView) {
+
+        public StepsHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             ButterKnife.bind(this, itemView);
-            btnStepsInfo.setOnClickListener(this);
         }
 
-        void bind(String stepDescription)
-        {
-            tvSteps.setText(stepDescription);
+        void bind(String stepDescription){
+            tvCard.setText(stepDescription);
+            tvCard.setTextSize(12);
         }
 
         @Override
         public void onClick(View v) {
             int stepIndex = getAdapterPosition();
-            mParentClickListener.onClick(stepIndex);
+            mHandler.onClick(stepIndex);
         }
     }
 }
