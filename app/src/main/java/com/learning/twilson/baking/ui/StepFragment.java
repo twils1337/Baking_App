@@ -80,28 +80,9 @@ public class StepFragment extends Fragment {
         mAutoPlay = autoPlay;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (Util.SDK_INT > 23){
-            if (mCurrentStep != null){
-                initializePlayer();
-            }
-        }
-    }
+    public Step getCurrentStep(){ return mCurrentStep; }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (Util.SDK_INT <= 23 || mExoPlayer == null){
-            if (mCurrentStep != null){
-                initializePlayer();
-            }
-
-        }
-    }
-
-    private void initializePlayer(){
+    public void initializePlayer(){
         if (mExoPlayer == null){
             Uri videoUri = Uri.parse(mCurrentStep.getVideoURL());
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), new DefaultTrackSelector());

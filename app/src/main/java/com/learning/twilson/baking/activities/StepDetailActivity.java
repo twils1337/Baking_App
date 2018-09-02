@@ -30,7 +30,7 @@ public class StepDetailActivity extends AppCompatActivity
     private StepsFragment mStepsFragment;
     private boolean mTwoPane;
     private long mPlayPosition = 0;
-    private boolean mIsAutoplay = true;
+    private boolean mIsAutoPlay = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,6 +141,17 @@ public class StepDetailActivity extends AppCompatActivity
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23){
+            if (mStepFragment.getCurrentStep() != null){
+                mStepFragment.initializePlayer();
+            }
+        }
+    }
+
+
+    @Override
     public void onStop() {
         super.onStop();
         if (Util.SDK_INT > 23){
@@ -152,7 +163,7 @@ public class StepDetailActivity extends AppCompatActivity
     public void onPause() {
         super.onPause();
         mPlayPosition = mStepFragment.getExoPlayer().getCurrentPosition();
-        mIsAutoplay = mStepFragment.getExoPlayer().getPlayWhenReady();
+        mIsAutoPlay = mStepFragment.getExoPlayer().getPlayWhenReady();
         if (Util.SDK_INT <= 23){
             mStepFragment.releasePlayer();
         }
@@ -161,8 +172,15 @@ public class StepDetailActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        mStepFragment.getExoPlayer().seekTo(mPlayPosition);
-        mStepFragment.getExoPlayer().setPlayWhenReady(mIsAutoplay);
+        if (Util.SDK_INT <= 23 || mStepFragment.getExoPlayer() == null){
+            if (mStepFragment.getCurrentStep() != null){
+                mStepFragment.initializePlayer();
+            }
+        }
+        else{
+            mStepFragment.getExoPlayer().seekTo(mPlayPosition);
+            mStepFragment.getExoPlayer().setPlayWhenReady(mIsAutoPlay);
+        }
     }
 
     public void onNavClick(View v){
